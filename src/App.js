@@ -84,6 +84,44 @@ const theme = createTheme({
         },
       },
     },
+    MuiTablePagination: {
+      styleOverrides: {
+        root: {
+          color: "white",
+        },
+        selectIcon: {
+          color: "white",
+        },
+        select: {
+          color: "white",
+        },
+      },
+    },
+    MuiMenu: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: "black",
+          border: "1px solid white",
+        },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          color: "white",
+          fontFamily: "Orbitron, sans-serif",
+          "&:hover": {
+            backgroundColor: "rgba(0, 255, 0, 0.2)",
+          },
+          "&.Mui-selected": {
+            backgroundColor: "rgba(0, 255, 0, 0.3)",
+            "&:hover": {
+              backgroundColor: "rgba(0, 255, 0, 0.4)",
+            },
+          },
+        },
+      },
+    },
   },
 });
 
