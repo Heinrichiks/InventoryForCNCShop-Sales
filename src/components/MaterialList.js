@@ -1,7 +1,7 @@
 import React, { use, useEffect, useState } from "react";
 import { collection, getDocs , deleteDoc, doc, query, where } from "firebase/firestore";
 import { db } from "../firebase";
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Paper, Button, Autocomplete, TextField, IconButton } from "@mui/material";
+import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Paper, Button, Autocomplete, TextField, IconButton, TablePagination } from "@mui/material";
 import algoliasearch from "algoliasearch/lite";
 import FilterListAltIcon from '@mui/icons-material/FilterListAlt';
 
@@ -32,7 +32,9 @@ const MaterialList = ({ formData, setFormData, setModoEditar, setVista}) => {
   const [ filtroLargo , setFiltroLargo ] = useState("");
   const [ inputLargo , setInputLargo ] = useState("");
 
- 
+  // 🎯 ESTADOS DE PAGINACIÓN - ¡Lo que faltaba!
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     if (filtroBusquedaGeneral.trim() !== "") {
@@ -91,31 +93,47 @@ const MaterialList = ({ formData, setFormData, setModoEditar, setVista}) => {
     }
   };
 
-  // Función para editar un material
-const handleEditar = (material) => {
-  setFormData({
-    ...formData,
-    id: material.id || material.objectID,  // Asignamos el ID del material a editar
-    categoria: material.categoria,
-    nombre: material.nombre,
-    acabado: material.acabado || "",
-    figura: material.figura,
-    espesorFraccion: material.espesorFraccion || "",
-    espesorDecimal: material.espesorDecimal || "",
-    diametroFraccion: material.diametroFraccion || "",
-    diametroDecimal: material.diametroDecimal || "",
-    anchoFraccion: material.anchoFraccion || "",
-    anchoDecimal: material.anchoDecimal || "",
-    largoFraccion: material.largoFraccion || "",
-    largoDecimal: material.largoDecimal || "",
-    cantidad: material.cantidad || 0,
-    min: material.min || 0,
-    max: material.max || 0,
-    costo: material.costo || 0,
-    costoPulgadaCuadrada: material.costoPulgadaCuadrada || 0,
-    costoPulgadaLineal: material.costoPulgadaLineal || 0,
-    ordenDeCompra: material.ordenDeCompra || "",
-  });
+  // 🎯 FUNCIONES DE PAGINACIÓN
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Volver a la primera página al cambiar filas por página
+  };
+
+  // 🎯 CALCULAR LOS DATOS A MOSTRAR EN LA PÁGINA ACTUAL
+  const datosPaginados = materiales.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
+    // Función para editar un material
+  const handleEditar = (material) => {
+    setFormData({
+      ...formData,
+      id: material.id || material.objectID,  // Asignamos el ID del material a editar
+      categoria: material.categoria,
+      nombre: material.nombre,
+      acabado: material.acabado || "",
+      figura: material.figura,
+      espesorFraccion: material.espesorFraccion || "",
+      espesorDecimal: material.espesorDecimal || "",
+      diametroFraccion: material.diametroFraccion || "",
+      diametroDecimal: material.diametroDecimal || "",
+      anchoFraccion: material.anchoFraccion || "",
+      anchoDecimal: material.anchoDecimal || "",
+      largoFraccion: material.largoFraccion || "",
+      largoDecimal: material.largoDecimal || "",
+      cantidad: material.cantidad || 0,
+      min: material.min || 0,
+      max: material.max || 0,
+      costo: material.costo || 0,
+      costoPulgadaCuadrada: material.costoPulgadaCuadrada || 0,
+      costoPulgadaLineal: material.costoPulgadaLineal || 0,
+      ordenDeCompra: material.ordenDeCompra || "",
+    });
 
   setModoEditar(true);
   setVista("formulario"); // Cambia la vista a modo edición
@@ -685,7 +703,8 @@ const eliminarMaterial = async (id) => {
               backgroundColor: "black",
               border: "1px solid pink" }
             }}>
-            {materiales.map((mat) => (
+              
+            {datosPaginados.map((mat) => (
               <TableRow key={mat.objectID || mat.id}>
                 <TableCell>{mat.categoria}</TableCell>
                 <TableCell>{mat.nombre}</TableCell>
@@ -751,6 +770,28 @@ const eliminarMaterial = async (id) => {
             ))}
           </TableBody>
         </Table>
+        {/* 🎯 COMPONENTE DE PAGINACIÓN - ¡Lo que faltaba! */}
+        <TablePagination  
+          component="div"
+          count={materiales.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[5, 10, 25, 50]}
+          labelRowsPerPage="Filas por página:"
+          labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+          sx={{
+            color: "white",
+            borderTop: "1px solid rgba(247, 0, 41, 0.3)",
+            "& .MuiTablePagination-selectIcon": {
+              color: "white",
+            },
+            "& .MuiTablePagination-actions": {
+              color: "white",
+            },
+          }}
+        />
       </Paper>
     </Box>
   );
