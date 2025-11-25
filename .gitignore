@@ -19,6 +19,9 @@
 .env.test.local
 .env.production.local
 
+# Firebase
+firebase.js.backup
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
