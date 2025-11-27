@@ -27,10 +27,10 @@ const SableLuzMaceWindu = ({ width = 100, height = 100 }) => {
     const ambient = new THREE.AmbientLight(0xffffff, 0.3);
     scene.add(ambient);
 
-    // Luz morada que ilumina el sable
-    const purpleLight = new THREE.PointLight(0x9933ff, 0, 3);
+    // Luz morada que ilumina SOLO el sable (alcance muy reducido)
+    const purpleLight = new THREE.PointLight(0x9933ff, 1.5, 1.0); // Alcance: 3 → 0.8
     purpleLight.position.set(0, 0.5, 0);
-    scene.add(purpleLight);
+    // scene.add(purpleLight); // Desactivada para evitar reflejos externos
 
     // --- Grupo principal del sable ---
     const sabreGroup = new THREE.Group();
