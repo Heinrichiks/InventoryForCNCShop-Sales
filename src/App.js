@@ -14,7 +14,7 @@ import { Button, Box, Typography, Icon } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { animate } from 'animejs';
-import EstrellaMuerte3D from "./components/EstrellaMuerte3D";
+import SableLuzMaceWindu from "./components/SableLuzMaceWindu";
 
 
 const theme = createTheme({
@@ -243,7 +243,7 @@ function App() {
               </Typography>
               </Box>
               <Box>
-                <EstrellaMuerte3D/>
+                <SableLuzMaceWindu/>
               </Box>
               <Box sx= {{ mr: -120 }}>
               </Box>
